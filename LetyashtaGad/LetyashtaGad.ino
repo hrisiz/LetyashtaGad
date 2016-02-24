@@ -18,6 +18,9 @@ int turn_right();
 int go_forward();
 int go_back();
 
+int up_motor_power(int motor);
+int low_motor_power(int motor);
+
 void establishContact();
 
 void setup() {
@@ -40,12 +43,12 @@ void loop(){
   digitalWrite(RED_LED,LOW);
   input = -1;
   while(input = Serial.read(),  input < 1 && input > 6); // 1 - up all motors 2 - low all motors 3 - left 4 -right 5 - forward 6 - back
-  switch(input)({
+  switch(input){
     case 1:
       up_drone();
       break;
     case 2:
-      down_drone();
+      down_drone(); 
       break;
     case 3:
       turn_left();
@@ -57,7 +60,7 @@ void loop(){
       go_forward();
       break;
     case 6:
-      go_back():
+      go_back();
       break;
   }
 }
