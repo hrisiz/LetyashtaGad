@@ -12,7 +12,7 @@ void setup() {
   pinMode(start, INPUT_PULLUP);
   Serial.begin(9600); 
   //while(digitalRead(start) == HIGH);
-  //establishContact();
+  establishContact();
 }
 
 void loop() {
