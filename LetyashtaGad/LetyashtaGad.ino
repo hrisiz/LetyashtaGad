@@ -1,6 +1,7 @@
 #include<msp430g2553.h>
 
 
+
 class Motor{
   private:
     int id;
@@ -55,6 +56,14 @@ class Motor{
           this->up_down_step = 5;
           this->off_power = 125;
           break;
+        case 3:
+          this->frequency = 50;
+          this->current_power = 1;
+          this->max_motor_power = 26;
+          this->min_motor_power = 13;
+          this->up_down_step = 1;
+          this->off_power = 11;
+          break;
       }
     }
     void up_motor_power(){
@@ -74,11 +83,11 @@ class Motor{
       }
     }
     void init_motor(){
-     // if(this->type == 1){
+      if(this->type == 1){
         this->set_motor_power(this->max_motor_power);
-      //}else if(this->type == 2){
-        //this->set_motor_power(this->off_power);        
-      //}
+      }else if(this->type == 2){
+        this->set_motor_power(this->off_power);        
+      }
     }
     void ready_motor(){
       this->set_motor_power(this->off_power);
@@ -102,9 +111,13 @@ class Motor{
     }
 };
 
-Motor motor[4] = {{9,2},
+class Drone{
+   Motor motor[4];
+   
+}
+Motor motor[4] = {{9,3},
                    {14,1},
-                   {10,2}, 
+                   {10,3}, 
                    {19,1}
                   };
                             
@@ -118,20 +131,21 @@ void setup() {
   
   pinMode(RED_LED, OUTPUT);  
   
-  Serial.begin(9600);
-  establishContact();
   
   digitalWrite(RED_LED,HIGH);
-  
-  while(input = Serial.read(),  input != 'R');
-  for(i = 0; i < 4; i++){
-    pinMode(motor[i].get_id(), OUTPUT); 
-    motor[i].init_motor();
-  }
-  while(input = Serial.read(),  input != 'S');
+  //delay(1000);
+  //while(input = Serial.read(),  input != 'R');
+//  for(i = 0; i < 4; i++){
+//    pinMode(motor[i].get_id(), OUTPUT); 
+//    motor[i].init_motor();
+//  }
+  //while(input = Serial.read(),  input != 'S');
+  delay(1000);
   for(i = 0; i < 4; i++){
     motor[i].ready_motor();
   }
+  Serial.begin(9600);
+  establishContact();
 }
 
 void loop(){
@@ -164,26 +178,26 @@ void loop(){
          motor[i].max_low();  
        }
        break;
-//    case '3':
-//      if(motors[1].check_power()-STEP <= MIN_MOTOR_POWER || motors[2].check_power()-STEP <= MIN_MOTOR_POWER){
-//        if(motors[1].check_power() < motors[2].check_power()){
-//          motors[1].up_motor_power(STEP);     
-//        }else if(motors[0].check_power() > motors[3].check_power()){
-//          motors[3].up_motor_power(STEP);
-//        }else{
-//          motors[0].up_motor_power(STEP);
-//          motors[3].up_motor_power(STEP);
-//        }
-//      }else{
-//        if(motors[1].check_power() < motors[2].check_power()){
-//          motors[2].low_motor_power(STEP);          
-//        }else if(motors[1].check_power() > motors[2].check_power()){
-//          motors[1].low_motor_power(STEP);
-//        }else{
-//          motors[1].low_motor_power(STEP);
-//          motors[2].low_motor_power(STEP);  
-//        }
-//      }
+    case '3':
+      if(motors[1].check_power()-STEP <= MIN_MOTOR_POWER || motors[2].check_power()-STEP <= MIN_MOTOR_POWER){
+        if(motors[1].check_power() < motors[2].check_power()){
+          motors[1].up_motor_power(STEP);     
+        }else if(motors[0].check_power() > motors[3].check_power()){
+          motors[3].up_motor_power(STEP);
+        }else{
+          motors[0].up_motor_power(STEP);
+          motors[3].up_motor_power(STEP);
+        }
+      }else{
+        if(motors[1].check_power() < motors[2].check_power()){
+          motors[2].low_motor_power(STEP);          
+        }else if(motors[1].check_power() > motors[2].check_power()){
+          motors[1].low_motor_power(STEP);
+        }else{
+          motors[1].low_motor_power(STEP);
+          motors[2].low_motor_power(STEP);  
+        }
+      }
       
 //      if(motors[1].check_power() > MIN_MOTOR_POWER)
 //        motors[1].low_motor_power(STEP);
