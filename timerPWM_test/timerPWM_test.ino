@@ -37,16 +37,16 @@ void setup()
   TCCR1B |= (1 << CS11);  // 8 prescaler: 0,5 microseconds at 16mhz
   TIMSK1 |= (1 << OCIE1A); // enable timer compare interrupt
   sei();
-  Serial.begin(9600);
-  while (!Serial.available()) {
-    Serial.println('A');
-  }
   for(int i = 0; i < 4; i++){
     motor[i].setValue(max_motor_power-min_motor_power);
   }
-  delay(500);
+  delay(1000);
   for(int i = 0; i < 4; i++){
     motor[i].setValue(0);
+  }
+  Serial.begin(9600);
+  while (!Serial.available()) {
+    Serial.println('A');
   }
 }
 
@@ -71,7 +71,8 @@ void loop()
     }
     
     if(read_string[2] == '!'){
-      Serial.println(motor[read_string[0]-'0'].getValue());
+      Serial.print(motor[read_string[0]-'0'].getValue());
+      Serial.println("!");
     }else if(read_string[2] == '+'){
       motor[read_string[0]-'0'].upValueWith(value);
     }else if(read_string[2] == '-'){

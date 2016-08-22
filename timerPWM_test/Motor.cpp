@@ -29,7 +29,13 @@ void Motor::setValue(int value){
 }
 
 void Motor::upValueWith(int value){
+  if(this->value < 100){
+    return;
+  }
   this->value += value;
+  if(this->value < 100){
+    this->value = 100;
+  }
   this->valueToPPMTime();
 }
 
