@@ -37,6 +37,12 @@ void setup()
   TCCR1B |= (1 << CS11);  // 8 prescaler: 0,5 microseconds at 16mhz
   TIMSK1 |= (1 << OCIE1A); // enable timer compare interrupt
   sei();
+  Serial.begin(9600);
+//  while (!Serial.available()) {
+//    Serial.println('A');
+//  }
+//  Serial.println("Ready!");
+  delay(5000);
   for(int i = 0; i < 4; i++){
     motor[i].setValue(max_motor_power-min_motor_power);
   }
@@ -44,10 +50,10 @@ void setup()
   for(int i = 0; i < 4; i++){
     motor[i].setValue(0);
   }
-  Serial.begin(9600);
-  while (!Serial.available()) {
-    Serial.println('A');
-  }
+//  delay(5000);
+//  for(int i = 0; i < 4; i++){
+//    motor[i].setValue(800);
+//  }
 }
 
 void loop()
@@ -62,7 +68,8 @@ void loop()
 //  Serial.println(motor[0].getPPMTime());
   next:
   while((read_char = Serial.read()) == -1);   // input type 0 100;2 50;3 80;
-  if(read_char == ';'){
+  //Serial.println(read_char);
+  if(read_char == ';' && string_len > 2){
     int value = 0;
     for(int i = 2; i < string_len; i++){
       if(read_string[i] >= '0' && read_string[i] <= '9'){
@@ -84,10 +91,10 @@ void loop()
     string_len = 0;
     goto next;
   }else{
-    //if((read_char >= '0' && read_char <= '9') || (read_char == ' ' && string_len > 0) || ((read_char == '+' || read_char == '!' || read_char == '-') && read_string[string_len-1] == ' ')){
+    if((read_char >= '0' && read_char <= '9') || (read_char == ' ' && string_len > 0) || ((read_char == '+' || read_char == '!' || read_char == '-') && (string_len > 0 && read_string[string_len-1] == ' '))){
       read_string[string_len] = read_char;
       string_len++;
-    //}
+    }
   }
 }
 

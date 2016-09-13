@@ -18,7 +18,7 @@ void Motor::valueToPPMTime(int new_ppm){
 Motor::Motor(int min_p, int max_p){
 	this->id = id;
 	this->value = 0;
-  this->valueToPPMTime();
+  this->ppm_time = 0;
   this->motor_stat_state = min_p;
   this->motor_max_state = max_p;
 }
